@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="WebScraper1" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Github\\WebScraper1\\WebScraper\\obj\\Release\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^C:\\Github\\WebScraper1\\WebScraper\\obj\\Release\\Package\\PackageTmp$" />
+  </parameter>
+</parameters>

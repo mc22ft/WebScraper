@@ -1,0 +1,139 @@
+﻿@model WebScraper.Models.InfoModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Head {
+    @Styles.Render("~/Content/css")
+}
+
+                    <h2>WebScraper 1.0</h2>
+
+
+@using (Html.BeginForm("Index", "Start", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        
+        <hr />
+       
+        <div class="form-inline">
+                @Html.LabelFor(model => model.Url, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Url, new { htmlAttributes = new { autofocus = "autofocus", @class = "form-control" } })
+                <input type="submit" value="Start!" class="btn btn-primary" />
+               
+
+            </div>
+        </div>
+
+        <div class="form-inline">
+            <div class="col-md-offset-2 col-md-10">
+                @Html.ValidationMessageFor(model => model.Url, "", new { @class = "text-danger vali-message" })
+                @Html.ValidationSummary(true, "", new { @class = "text-danger vali-message" })
+
+
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+
+      
+            @if (Model.responseData != null)
+            {
+                <dd>
+                    <h3>@Model.responseData</h3>
+                </dd>
+            }
+            else
+            {
+                <dd>
+
+
+                    @if (Model.dayList != null)
+                    {
+
+                        <h1>Följande filmer hittades</h1>
+                        //Skriv ut dom dagarna som fungerar
+
+                        for (int i = 0; i < Model.dayList.Count; i++)
+                        {
+                            //dag nr 2 fungerar
+                            int dayNr = Model.dayList[i];
+                            dayNr--;
+
+
+                            foreach (var movieInfo in Model.moviesList)
+                            {
+
+                                if (movieInfo.Status == "1")
+                                {
+                                    string text = String.Format("Filmen {0} klockan {1} på {2}", movieInfo.Movie, movieInfo.Time, movieInfo.Day);
+
+                                    <p>@text @Html.ActionLink("Välj denna och boka bord", "Details", new { id = movieInfo.Id })</p>
+
+                                }
+
+
+
+                            }
+                        }
+
+
+
+                    }
+
+
+
+
+                </dd>
+
+                <dd>
+                    @if (Model.restaurantTimeList != null)
+                    {
+
+                        <h1>Följande tider är lediga att boka på Zekes restaurang</h1>
+
+                        if (Model.restaurantTimeList.Count != 0)
+                        {
+                            /**/
+
+                            for (int i = 0; i < Model.restaurantTimeList.Count; i++)
+                            {
+                                string time = Model.movieObject.Time.Substring(0, 2);
+
+                                string timeDaySting = Model.restaurantTimeList[i];
+                                string timeSting = timeDaySting.Remove(0, 3);
+
+                                string startTime = timeSting.Substring(0, 2);
+
+                                string stopTime = timeSting.Remove(0, 2);
+
+
+                                string text = String.Format("Det finns lediga bord mellan klockan {0} och {1} efter att ha set filmen {2} klockan {3}", startTime, stopTime, Model.movieObject.Movie, time);
+
+
+                                //<p>@text  @Html.ActionLink("Boka detta bord", "Login")</p>
+                                <p>@text  @Html.ActionLink("Boka detta bord", "Login", new { bookingTime = Model.restaurantTimeList[i] })</p>
+                            }
+                        }
+                        else
+                        {
+                            <p>Det finns inga lediga tider! :(</p>
+                        }
+
+                    }
+
+                </dd>
+
+            }
+
+    </dl>
+</div>
